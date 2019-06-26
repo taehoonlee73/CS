@@ -1,0 +1,124 @@
+﻿<!--region #xaml_customform-->
+    <UserControl x:Class="WpfApplication1.CustomAppointmentForm"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" 
+             xmlns:dxsch="http://schemas.devexpress.com/winfx/2008/xaml/scheduler"
+             xmlns:dxschi="http://schemas.devexpress.com/winfx/2008/xaml/scheduler/internal"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             Loaded="UserControl_Loaded">
+
+    <UserControl.Resources>
+        <dxschi:TimeSpanToDateTimeConverter x:Key="timeSpanToDateTimeConverter"/>
+        <dxschi:InvertedBoolConverter x:Key="invertedBoolConverter"/>
+    </UserControl.Resources>
+    
+    <Grid Margin="14">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!--Subject-->
+        <TextBlock Margin="0,0,0,8" 
+                   HorizontalAlignment="Left"
+                   Text="Subject:" />
+        <dxe:TextEdit Margin="0,0,0,8"
+                      Grid.Column="1" Grid.ColumnSpan="2"
+                      EditValue="{Binding Controller.Subject, Mode=TwoWay}"/>
+
+        <!--Start-->
+        <TextBlock Margin="0,0,4,4"
+                   HorizontalAlignment="Left"
+                   Grid.Row="1" Grid.Column="0" 
+                   Text="Start:" />
+        <dxe:DateEdit Margin="0,0,4,4"
+                      Grid.Row="1" Grid.Column="1" 
+                      EditValue="{Binding Controller.DisplayStartDate, Mode=TwoWay}"/>
+        <dxe:ButtonEdit Margin="0,0,0,4"
+                        Grid.Row="1" Grid.Column="2"
+                        AllowDefaultButton="False"
+                        MaskType="DateTime" DisplayFormatString="{Binding TimeEditMask}"
+                        Mask="{Binding TimeEditMask}" 
+                        EditValue="{Binding Controller.DisplayStartTime, Mode=TwoWay,
+                                            Converter={StaticResource timeSpanToDateTimeConverter}}"
+                        IsEnabled="{Binding ElementName=chkAllDay, Path=IsChecked,
+                                            Converter={StaticResource ResourceKey=invertedBoolConverter}}"/>
+
+        <!--End-->
+        <TextBlock HorizontalAlignment="Left"
+                   Grid.Row="2" Grid.Column="0"
+                   Text="End:"/>
+        <dxe:DateEdit Margin="0,0,4,4"
+                      Grid.Row="2" Grid.Column="1" 
+                      EditValue="{Binding Controller.DisplayEndDate, Mode=TwoWay}" />
+        <dxe:ButtonEdit Margin="0,0,0,4"
+                        Grid.Row="2" Grid.Column="2" 
+                        AllowDefaultButton="False" MaskType="DateTime"
+                        DisplayFormatString="{Binding TimeEditMask}" Mask="{Binding TimeEditMask}" 
+                        EditValue="{Binding Controller.DisplayEndTime, Mode=TwoWay,
+                                            Converter={StaticResource timeSpanToDateTimeConverter}}" 
+                        IsEnabled="{Binding ElementName=chkAllDay, Path=IsChecked, 
+                                            Converter={StaticResource ResourceKey=invertedBoolConverter}}"/>
+
+        <!--All day event-->
+        <dxe:CheckEdit Name="chkAllDay" Margin="0,0,0,8"
+                       HorizontalAlignment="Left"
+                       Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" 
+                       Content="All day" IsChecked="{Binding Controller.AllDay, Mode=TwoWay}"/>
+
+        <!--Label-->
+        <TextBlock Margin="0,0,0,4" 
+                   HorizontalAlignment="Left"
+                   Grid.Row="4" Grid.Column="0"
+                   Text="Label:"/>
+        <dxsch:AppointmentLabelEdit Margin="0,0,0,4"
+                                 Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2"
+                                 Storage="{Binding Controller.Storage}"
+                                 EditValue="{Binding Controller.Label, Mode=TwoWay}" />
+
+        <!--Status-->
+        <TextBlock Margin="0,0,0,8" 
+                   HorizontalAlignment="Left" 
+                   Grid.Row="5" Grid.Column="0" 
+                   Text="Status:" />
+        <dxsch:AppointmentStatusEdit Margin="0,0,0,8"
+                                  Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2"
+                                  Storage="{Binding Controller.Storage}" 
+                                  EditValue="{Binding Controller.Status, Mode=TwoWay}" />
+
+        <!--Contact Info (custom field)-->
+        <TextBlock Margin="0,0,0,8" 
+                   HorizontalAlignment="Left"
+                   Grid.Row="6" Grid.Column="0" 
+                   Text="Contact Info:" />
+        <dxe:TextEdit Margin="0,0,0,8"
+                      Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2"
+                      TextWrapping="Wrap"
+                      EditValue="{Binding Controller.Contact, Mode=TwoWay}"/>
+
+        <!--Buttons-->
+        <StackPanel Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" 
+                    Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Margin="6,0,0,0" MinWidth="75" 
+                    Content="OK" Click="Ok_button_Click" />
+            <Button Margin="6,0,0,0" MinWidth="75" 
+                    Content="Cancel" Click="Cancel_button_Click" />
+        </StackPanel>
+    </Grid>
+</UserControl>
+<!--endregion #xaml_customform-->
